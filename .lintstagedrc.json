@@ -1,0 +1,8 @@
+{
+  "*.ts":{
+    "editor.defaultFormatter": [
+      "eslint 'src/**' --fix",
+      "git add"
+    ]
+  }
+}
