@@ -1,8 +1,5 @@
 {
-  "*.ts":{
-    "editor.defaultFormatter": [
-      "eslint 'src/**' --fix",
-      "npm run test:staged"
-    ]
+  "*.ts": {
+    "editor.defaultFormatter": ["eslint 'src/**' --fix", "npm run test:staged"]
   }
 }
