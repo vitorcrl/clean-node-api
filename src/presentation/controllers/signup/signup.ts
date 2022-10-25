@@ -1,7 +1,6 @@
-import { httpResponse, HttpRequest,Controller,EmailValidator } from "../protocols";
-import { MissingParamError,InvalidParamError  } from "../errors/index";
-import { badRequest, serverError } from "../helpers/http-helper";
-import { AddAccount } from "../../domain/usecases/add-account";
+import { httpResponse, HttpRequest,Controller,EmailValidator, AddAccount} from "./signup-protocols";
+import { MissingParamError,InvalidParamError  } from "../../errors/index";
+import { badRequest, serverError } from "../../helpers/http-helper";
 
 
 export class SignUpController implements Controller {
@@ -32,11 +31,11 @@ export class SignUpController implements Controller {
       if (!isValid) {
         return badRequest(new InvalidParamError("email"));
       }
-this.addAccount.add({
-  name,
-  email,
-  password
-})
+     this.addAccount.add({
+      name,
+      email,
+      password
+    })
     } catch (error) {
       return serverError();
     }
