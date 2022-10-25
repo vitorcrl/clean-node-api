@@ -8,3 +8,7 @@ export const serverError= (): httpResponse => ({
   statusCode: 500,
   body: new Error("Internal server error"),
 })
+export const ok = (data: any): httpResponse => ({
+  statusCode: 200,
+  body: data,
+});
