@@ -46,4 +46,26 @@ describe('ValidationComposite', () => {
         })
         expect(error).toEqual(new InvalidParamError('any_field'))
     })
+    test('Should return the first error if more than one validation fails', () => {
+        const { sut, validationStubs } = makeSut()
+        jest.spyOn(validationStubs[0], 'validate').mockReturnValueOnce(
+            new Error()
+        )
+        jest.spyOn(validationStubs[1], 'validate').mockReturnValueOnce(
+            new InvalidParamError('any_field')
+        )
+        const error = sut.validate({
+            field: 'any_value',
+            fieldToCompare: 'wrong_value',
+        })
+        expect(error).toEqual(new Error())
+    })
+    test('Should not return if validation succeeds', () => {
+        const { sut } = makeSut()
+        const error = sut.validate({
+            field: 'any_value',
+            fieldToCompare: 'any_value',
+        })
+        expect(error).toBeFalsy()
+    })
 })
