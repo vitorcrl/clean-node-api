@@ -1,5 +1,5 @@
 export * from '../../protocols'
 export * from '../../protocols/email-validator'
 export * from '../../../domain/usecases/authentication'
-export * from '../../helpers/http-helper'
+export * from '../../helpers/http/http-helper'
 export * from '../signup/signup-protocols'
