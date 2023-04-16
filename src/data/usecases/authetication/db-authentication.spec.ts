@@ -1,4 +1,5 @@
 import { IAuthenticationModel } from '../../../domain/usecases/authentication'
+import { IHashCompare } from '../../protocols/cryptography/hash-compare'
 import { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
 import { AccountModel } from '../add-account/db-add-account-protocols'
 import { DbAuthentication } from './db-authentication'
@@ -23,13 +24,31 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
     }
     return new LoadAccountByEmailRepositoryStub()
 }
-const makeSut = (): any => {
+const makeHashCompare = (): IHashCompare => {
+    class HashCompareStub {
+        async compare(value: string, hash: string): Promise<boolean> {
+            return await Promise.resolve(true)
+        }
+    }
+    return new HashCompareStub()
+}
+interface SutTypes {
+    sut: DbAuthentication
+    loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
+    hashCompareStub: IHashCompare
+}
+const makeSut = (): SutTypes => {
     const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository()
-    const sut = new DbAuthentication(loadAccountByEmailRepositoryStub)
+    const hashCompareStub = makeHashCompare()
+    const sut = new DbAuthentication(
+        loadAccountByEmailRepositoryStub,
+        hashCompareStub
+    )
 
     return {
         sut,
         loadAccountByEmailRepositoryStub,
+        hashCompareStub,
     }
 }
 describe('DbAuthentication UseCase', () => {
@@ -61,5 +80,14 @@ describe('DbAuthentication UseCase', () => {
         ).mockReturnValueOnce(null)
         const accessToken = await sut.auth(makeFakeAuthentication())
         expect(accessToken).toBe(null)
+    })
+    test('Should call hashCompare with correct password', async () => {
+        const { sut, hashCompareStub } = makeSut()
+        const compareSpy = jest.spyOn(hashCompareStub, 'compare')
+        await sut.auth(makeFakeAuthentication())
+        expect(compareSpy).toHaveBeenCalledWith(
+            'any_password',
+            'hashed_password'
+        )
     })
 })
