@@ -1,5 +1,6 @@
 import { IAuthenticationModel } from '../../../domain/usecases/authentication'
 import { IHashCompare } from '../../protocols/cryptography/hash-compare'
+import { ITokenGenerator } from '../../protocols/cryptography/token-generator'
 import { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
 import { AccountModel } from '../add-account/db-add-account-protocols'
 import { DbAuthentication } from './db-authentication'
@@ -32,23 +33,35 @@ const makeHashCompare = (): IHashCompare => {
     }
     return new HashCompareStub()
 }
+const makeTokenGenerator = (): ITokenGenerator => {
+    class tokenGeneratorStub implements ITokenGenerator {
+        async generate(id: string): Promise<string> {
+            return await Promise.resolve('any_token')
+        }
+    }
+    return new tokenGeneratorStub()
+}
 interface SutTypes {
     sut: DbAuthentication
     loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
     hashCompareStub: IHashCompare
+    tokenGeneratorStub: ITokenGenerator
 }
 const makeSut = (): SutTypes => {
     const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository()
     const hashCompareStub = makeHashCompare()
+    const tokenGeneratorStub = makeTokenGenerator()
     const sut = new DbAuthentication(
         loadAccountByEmailRepositoryStub,
-        hashCompareStub
+        hashCompareStub,
+        tokenGeneratorStub
     )
 
     return {
         sut,
         loadAccountByEmailRepositoryStub,
         hashCompareStub,
+        tokenGeneratorStub,
     }
 }
 describe('DbAuthentication UseCase', () => {
@@ -105,5 +118,11 @@ describe('DbAuthentication UseCase', () => {
         )
         const accessToken = await sut.auth(makeFakeAuthentication())
         expect(accessToken).toBeNull()
+    })
+    test('Should call TokenGenerator with correct id', async () => {
+        const { sut, tokenGeneratorStub } = makeSut()
+        const compareSpy = jest.spyOn(tokenGeneratorStub, 'generate')
+        await sut.auth(makeFakeAuthentication())
+        expect(compareSpy).toHaveBeenCalledWith('valid_id')
     })
 })
