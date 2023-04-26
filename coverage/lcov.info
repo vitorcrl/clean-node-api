@@ -2,12 +2,12 @@ TN:
 SF:src/infra/criptography/bcrypt-adapter.ts
 FN:5,<instance_members_initializer>
 FN:5,BcryptAdapter
-FN:6,encrypt
+FN:6,hash
 FNF:3
 FNH:3
 FNDA:6,<instance_members_initializer>
 FNDA:6,BcryptAdapter
-FNDA:3,encrypt
+FNDA:3,hash
 DA:1,1
 DA:2,1
 DA:3,1
