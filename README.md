@@ -2,6 +2,10 @@
 
 Este é um curso que aborda as principais tecnologias e técnicas para desenvolvimento de aplicações em NodeJs utilizando boas práticas de programação como TDD, DDD, Clean Architecture e SOLID. Além disso, a aplicação desenvolvida será coberta por 100% de testes automatizados.
 
+Este curso é do  professor Rodrigo Manguinho (Mango).
+O objetivo do treinamento é mostrar como criar uma API com uma arquitetura bem definida e desacoplada, utilizando TDD (programação orientada a testes) como metodologia de trabalho, Clean Architecture para fazer a distribuição de responsabilidades em camadas, sempre seguindo os princípios do SOLID e, sempre que possível, aplicando Design Patterns para resolver alguns problemas comuns.
+
+
 ## Tecnologias
 
 As tecnologias utilizadas neste curso são:
